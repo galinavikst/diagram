@@ -39,6 +39,6 @@
 
 ## Deployment
 
-The app is deployed using [Vercel](https://vercel.com/). You can access the deployed version at: [diagram](https://github.com/galinavikst/diagram)
+The app is deployed using [Vercel](https://vercel.com/). You can access the deployed version at: [diagram](https://diagram-two.vercel.app/)
 
 
