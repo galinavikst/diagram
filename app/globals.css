@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+}
+
+input[type="checkbox"]:checked:after {
+  content: "\2714";
+  color: #fff;
+  font-size: 12px;
+}
+
+.react-flow__node-selectorNode {
+  z-index: -1;
+}
+
+.react-flow .react-flow__handle {
+  bottom: 1px;
+  z-index: 50;
+  background: #adb5bd;
+  border: none;
+}
+
+.react-flow .react-flow__handle-top {
+  opacity: 0;
+  top: 0;
+}
+
+.react-flow .react-flow__handle-right {
+  top: 83%;
+  right: 1px;
+}
