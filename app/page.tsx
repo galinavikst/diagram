@@ -22,6 +22,7 @@ export default function Home() {
     <PersistGate loading={null} persistor={persistor}>
       <main className="h-screen w-screen p-12">
         <ReactFlow
+          // @ts-expect-error
           nodes={nodesData}
           onNodesChange={(e) => dispatch(onNodesChange(e))}
           nodeTypes={nodeTypes}

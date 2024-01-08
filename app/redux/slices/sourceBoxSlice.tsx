@@ -77,9 +77,10 @@ export const sourceSlice = createSlice({
     removeEdges: (state, action) => {
       state.edgesData = action.payload;
     },
-
     onNodesChange: (state, action: PayloadAction<NodeChange[]>) => {
+      // @ts-expect-error
       const updatedNodes = applyNodeChanges(action.payload, state.nodesData);
+      // @ts-expect-error
       state.nodesData = updatedNodes;
     },
   },
