@@ -1,19 +1,25 @@
 "use client";
 import Image from "next/image";
 import CheckBox from "./CheckBox";
-import { useContext } from "react";
-import { BoxContext } from "./Box";
+import { NodeData, updateNodesData } from "../redux/slices/sourceBoxSlice";
+import { useAppDispatch } from "../redux/store";
 
-type Props = {};
+type Props = {
+  node: NodeData;
+};
 
-export default function PickAction({}: Props) {
-  const { boxState, setBoxState } = useContext(BoxContext);
+export default function PickAction({ node }: Props) {
+  const dispatch = useAppDispatch();
 
   const handleOpen = () => {
-    setBoxState((prevState) => ({
-      ...prevState,
-      open: !prevState.open,
-    }));
+    if (node) {
+      const updatedNode = {
+        ...node,
+        position: { x: node.xPos, y: node.yPos },
+        data: { ...node.data, open: !node.data.open },
+      };
+      dispatch(updateNodesData(updatedNode));
+    }
   };
 
   return (
@@ -23,12 +29,12 @@ export default function PickAction({}: Props) {
     >
       <p className="text-stone-700 text-sm cursor-pointer">Виберіть значення</p>
       <Image
-        src={boxState.open ? "./svg/up.svg" : "./svg/down.svg"}
+        src={node.data.open ? "./svg/up.svg" : "./svg/down.svg"}
         alt="arrow"
         width={24}
         height={24}
       />
-      {boxState.open && <CheckBox />}
+      {node.data.open && <CheckBox node={node} />}
     </div>
   );
 }

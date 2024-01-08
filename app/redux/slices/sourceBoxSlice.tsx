@@ -1,19 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { NodeChange, applyNodeChanges } from "reactflow";
 
-type Options = {
+type customOptions = {
   open: boolean;
   selectedValue: string;
+  haveCheckedOption: boolean;
   options: string[];
 };
 
 export interface NodeData {
   id: string;
-  position: { x: number; y: number };
+  xPos?: number;
+  yPos?: number;
+  position?: { x: number; y: number };
   type: string;
-  data: Options;
+  data: customOptions;
   zIndex: number;
-  haveCheckedOption: boolean;
 }
 
 export interface EdgeData {
@@ -33,10 +36,12 @@ const initialState: SourceBoxState = {
   nodesData: [
     {
       id: "1",
+      type: "sourceBox",
       position: { x: 50, y: 50 },
       zIndex: 0,
       data: {
         open: false,
+        haveCheckedOption: false,
         selectedValue: "Вибрати значення",
         options: [
           "Варіант 1",
@@ -47,8 +52,6 @@ const initialState: SourceBoxState = {
           "Варіант 6",
         ],
       },
-      haveCheckedOption: false,
-      type: "sourceBox",
     },
   ],
 };
@@ -63,16 +66,32 @@ export const sourceSlice = createSlice({
     createEdge: (state, action: PayloadAction<EdgeData>) => {
       state.edgesData = [...state.edgesData, action.payload];
     },
+    updateNodesData: (state, action) => {
+      state.nodesData = state.nodesData.map((node) =>
+        node.id === action.payload.id ? action.payload : node
+      );
+    },
     removeNodes: (state, action) => {
       state.nodesData = action.payload;
     },
     removeEdges: (state, action) => {
       state.edgesData = action.payload;
     },
+
+    onNodesChange: (state, action: PayloadAction<NodeChange[]>) => {
+      const updatedNodes = applyNodeChanges(action.payload, state.nodesData);
+      state.nodesData = updatedNodes;
+    },
   },
 });
 
-export const { createNode, createEdge, removeNodes, removeEdges } =
-  sourceSlice.actions;
+export const {
+  createNode,
+  createEdge,
+  removeNodes,
+  removeEdges,
+  updateNodesData,
+  onNodesChange,
+} = sourceSlice.actions;
 
 export default sourceSlice.reducer;

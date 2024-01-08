@@ -4,28 +4,13 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
 import { thunk } from "redux-thunk";
 import storage from "redux-persist/es/storage";
-import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-// const createNoopStorage = () => {
-//   return {
-//     getItem(_key: any) {
-//       return Promise.resolve(null);
-//     },
-//     setItem(_key: any, value: any) {
-//       return Promise.resolve(value);
-//     },
-//     removeItem(_key: any) {
-//       return Promise.resolve();
-//     },
-//   };
-// };
-// const storage =
-//   typeof window !== "undefined"
-//     ? createWebStorage("local")
-//     : createNoopStorage();
+import hardSet from "redux-persist/es/stateReconciler/hardSet";
+//import storage from "./storage"; cuctom storage
 
 const persistConfig = {
-  key: "root",
+  key: "root", // or 'source' - name of slice, if custom storage
   storage,
+  //whitelist: ["edgesData", "nodesData"], // if custom storage
 };
 
 const rootReducer = combineReducers({
@@ -37,14 +22,13 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+    getDefaultMiddleware({ serializableCheck: false }).concat(thunk),
 });
 
 export const persistor = persistStore(store);
 export default store;
 
+// store without redux-persist:
 // export const store = configureStore({
 //   reducer: {
 //     source: sourceReducer,
